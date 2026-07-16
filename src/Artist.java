@@ -1,6 +1,3 @@
-import java.util.ArrayList;
-import java.util.List;
-
 public class Artist extends Participant {
     Writer partner;
 
@@ -10,5 +7,10 @@ public class Artist extends Participant {
         this.partner = null;
         this.avoiders = null;
         this.assignedCard = null;
+    }
+
+    public Artist (String name) {
+        super();
+        this.name = name;
     }
 }

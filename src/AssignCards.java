@@ -1,6 +1,8 @@
 import java.util.List;
+import java.util.Random;
 
 public class AssignCards {
+    public static Random rand = new Random();
 
     public static void assignBestCard(ParticipantPair pair, List<TarotCard> unassignedCards){
         CardClass pref = pair.preferredClass;

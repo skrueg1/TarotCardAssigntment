@@ -3,11 +3,9 @@ import java.util.List;
 import java.util.Random;
 
 public class AssignPairings {
-    public static void main(String[] args){
+    List<ParticipantPair> pairings;
 
-        List<Writer> writers = new ArrayList<>();
-        List<Artist> artists = new ArrayList<>();
-        List<ParticipantPair> pairings = new ArrayList<>();
+    public void run() {
 
         // parse csv --> populate writers and artists with ALL writers and artists
 
@@ -234,7 +232,7 @@ public class AssignPairings {
 
     }
 
-    public static Artist assignArtist(Writer writer,
+    public Artist assignArtist(Writer writer,
                                       List<Artist> preferredList,
                                       List<Artist> eitherList,
                                       List<Artist> oppositeList,
@@ -260,5 +258,4 @@ public class AssignPairings {
         artist.partner = writer;
         return artist;
     }
-
 }

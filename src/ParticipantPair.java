@@ -2,11 +2,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class ParticipantPair {
-    Artist artist;
-    Writer writer;
-    CardClass preferredClass;
-    List<TarotCard> avoiders;
-    TarotCard assignedCard;
+    public Artist artist;
+    public Writer writer;
+    public CardClass preferredClass;
+    public List<TarotCard> avoiders;
+    public TarotCard assignedCard;
     int priority;
 
     public ParticipantPair(Writer writer, Artist artist) {

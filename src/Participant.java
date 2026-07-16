@@ -1,20 +1,15 @@
-import java.awt.List;
+import java.util.ArrayList;
+import java.util.List;
 
 public class Participant {
     String name;
     CardClass preferredCardClass;
-    List<TarotCard> avoiders;
+    List<TarotCard> avoiders = new ArrayList<>();
     TarotCard assignedCard;
 
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public void setPreferredCardClass(CardClass preferredCardClass) {
-        this.preferredCardClass = preferredCardClass;
-    }
-
-    public void setAvoidedCards(List avoidedCards) {
-        this.avoiders = avoidedCards;
+    public Participant() {
+        this.name = null;
+        this.preferredCardClass = null;
+        this.assignedCard = null;
     }
 }
