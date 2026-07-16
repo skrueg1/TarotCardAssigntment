@@ -27,7 +27,7 @@ public class ParticipantPair {
         this.priority = 0;
     }
 
-    public List<TarotCard> setAvoiders() {
+    public void setAvoiders() {
         List<TarotCard> avoiders = new ArrayList<>();
 
         for (TarotCard card : artist.avoiders) {
@@ -39,6 +39,8 @@ public class ParticipantPair {
             if (avoiders.contains(card)) continue;
             avoiders.add(card);
         }
+
+        this.avoiders = avoiders;
     }
 
     public void setCard(TarotCard card){
@@ -48,7 +50,15 @@ public class ParticipantPair {
     }
 
     public void setPriority(){
+        CardClass aPref = artist.preferredCardClass;
+        CardClass wPref = writer.preferredCardClass;
 
+        if ((wPref != null && aPref != null) && (wPref == aPref))
+            this.priority = 1;
+        else if ((wPref == null && aPref != null) || (wPref != null && aPref == null))
+            this.priority = 2;
+        else
+            this.priority = 3;
     }
 
 }

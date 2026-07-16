@@ -19,4 +19,30 @@ public class Utilities {
         // neither participants have preference -> return no preference (null)
         return null;
     }
+
+    public static List<ParticipantPair> sortPairsByPriority(List<ParticipantPair> pairs){
+        List<ParticipantPair> first = new ArrayList<>();
+        List<ParticipantPair> second = new ArrayList<>();
+        List<ParticipantPair> third = new ArrayList<>();
+
+        for (ParticipantPair pair : pairs){
+            if (pair.priority == 1) first.add(pair);
+            else if (pair.priority == 2) second.add(pair);
+            else if (pair.priority == 3) third.add(pair);
+        }
+
+        first.addAll(second);
+        first.addAll(third);
+
+        return first;
+    }
+
+    public static List<ParticipantPair> getPairsByPriority(List<ParticipantPair> pairs, int priorityLevel){
+        List<ParticipantPair> newlist = new ArrayList<>();
+        for (ParticipantPair pair : pairs){
+            if (pair.priority == priorityLevel) newlist.add(pair);
+        }
+        return newlist;
+    }
+
 }

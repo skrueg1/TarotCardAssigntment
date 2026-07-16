@@ -1,10 +1,8 @@
-import javafx.util.Pair;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
-public class createPairings {
+public class AssignPairings {
     public static void main(String[] args){
 
         List<Writer> writers = new ArrayList<>();
@@ -224,11 +222,13 @@ public class createPairings {
             throw new RuntimeException(e);
         }
 
-
+        /*
+            Add final touches to all pairs
+         */
         for (ParticipantPair pair : pairings) {
+            pair.preferredClass = Utilities.determinePairPreference(pair.writer, pair.artist);
             pair.setAvoiders();
             pair.setPriority();
-            pair.preferredClass = Utilities.determinePairPreference(pair.writer, pair.artist);
         }
 
 
