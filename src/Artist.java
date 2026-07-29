@@ -1,3 +1,5 @@
+import java.util.ArrayList;
+
 public class Artist extends Participant {
     Writer partner;
 
@@ -5,7 +7,7 @@ public class Artist extends Participant {
         this.name = null;
         this.preferredCardClass = null;
         this.partner = null;
-        this.avoiders = null;
+        this.avoiders = new ArrayList<>();
         this.assignedCard = null;
     }
 
@@ -13,4 +15,15 @@ public class Artist extends Participant {
         super();
         this.name = name;
     }
+
+    @Override
+    public String toString(){
+        // name,PREFERENCE,partner,"avoiders",assigned card
+        return this.name + "," +
+               Utilities.preferenceToString(this.preferredCardClass) + "," +
+               partnerNameToString(this.partner) + ",\"" +
+               Utilities.avoidersToString(this.avoiders) + "\"," +
+               Utilities.cardNameToString(this.assignedCard);
+    }
+
 }

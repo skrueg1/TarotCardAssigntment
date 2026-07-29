@@ -1,8 +1,17 @@
+import java.util.HashMap;
 import java.util.List;
 import java.util.Random;
 
 public class AssignCards {
     public static Random rand = new Random();
+    public static HashMap<String, TarotCard> deck;
+
+    public static void run() {
+
+        deck = Utilities.getTarotDeck();
+
+
+    }
 
     public static void assignBestCard(ParticipantPair pair, List<TarotCard> unassignedCards){
         CardClass pref = pair.preferredClass;
@@ -30,6 +39,7 @@ public class AssignCards {
         int halfMatches = 0;
         int noMatches = 0;
 
+        /*
         for (TarotCard card : deck) {
             if (card.artist.preferredCardClass == null && card.writer.preferredCardClass == null) {
                 fullMatches++;
@@ -44,7 +54,7 @@ public class AssignCards {
             } else {
                 noMatches++;
             }
-        }
+        } */
 
         /* Print */
         System.out.println("*********** PAIRING STATISTICS ***********");

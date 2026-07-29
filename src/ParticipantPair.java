@@ -13,7 +13,7 @@ public class ParticipantPair {
         this.artist = artist;
         this.writer = writer;
         this.preferredClass = null;
-        this.avoiders = null;
+        this.avoiders = new ArrayList<>();
         this.assignedCard = null;
         this.priority = 0;
     }
@@ -22,22 +22,21 @@ public class ParticipantPair {
         this.artist = artist;
         this.writer = writer;
         this.preferredClass = preferredClass;
-        this.avoiders = null;
+        this.avoiders = new ArrayList<>();
         this.assignedCard = null;
         this.priority = 0;
     }
 
     public void setAvoiders() {
-        List<TarotCard> avoiders = new ArrayList<>();
 
         for (TarotCard card : artist.avoiders) {
             if (card == null) break;
-            avoiders.add(card);
+            this.avoiders.add(card);
         }
         for (TarotCard card : writer.avoiders) {
             if (card == null) break;
-            if (avoiders.contains(card)) continue;
-            avoiders.add(card);
+            if (this.avoiders.contains(card)) continue;
+            this.avoiders.add(card);
         }
 
         this.avoiders = avoiders;
@@ -45,8 +44,8 @@ public class ParticipantPair {
 
     public void setCard(TarotCard card){
         this.assignedCard = card;
-        artist.assignedCard = card;
-        writer.assignedCard = card;
+        this.artist.assignedCard = card;
+        this.writer.assignedCard = card;
     }
 
     public void setPriority(){
@@ -59,6 +58,17 @@ public class ParticipantPair {
             this.priority = 2;
         else
             this.priority = 3;
+    }
+
+    @Override
+    public String toString(){
+        // artist,writer,PREFERENCE,"avoiders",assigned card,priority
+        return  this.artist.name + "," +
+                this.writer.name + "," +
+                Utilities.preferenceToString(this.preferredClass) + ",\"" +
+                Utilities.avoidersToString(this.avoiders) + "\"," +
+                Utilities.cardNameToString(this.assignedCard) + "," +
+                this.priority;
     }
 
 }
