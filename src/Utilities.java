@@ -9,6 +9,7 @@ import java.util.HashMap;
 import java.util.List;
 
 public class Utilities {
+    public static HashMap<String, TarotCard> deck;
 
     public static CardClass determinePairPreference(Writer writer, Artist artist){
         CardClass writerPref = writer.preferredCardClass;
@@ -52,11 +53,11 @@ public class Utilities {
         return newlist;
     }
 
-    public static HashMap<String, TarotCard> getTarotDeck() {
+    public static void fillTarotDeck() {
+        deck = new HashMap<>();
         String file = "data/deck.csv";
         String line;
 
-        HashMap<String, TarotCard> deck = new HashMap<>();
         CardClass cardClass = null;
         try (BufferedReader br = new BufferedReader(new FileReader(file))) {
             while ((line = br.readLine()) != null) {
@@ -70,6 +71,13 @@ public class Utilities {
         } catch (IOException e) {
             e.printStackTrace();
         }
+
+        System.out.println("Confirming deck size: " + deck.size());
+    }
+
+    public static HashMap<String, TarotCard> getTarotDeck() {
+        if (deck != null && !deck.isEmpty()) return deck;
+        fillTarotDeck();
         return deck;
     }
 

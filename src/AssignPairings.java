@@ -9,14 +9,22 @@ public class AssignPairings {
     List<Artist> artists;
     List<Writer> writers;
 
-    public void run() {
+    public void main(String[] args) throws IOException {
+
+        // Creates Writer and Artist objects from responses.csv
+        // Also populates artists and writers class Lists
+        parseResponses();
+
+        // Pairs Writers and Artists based on preferences
+        // Creates final ParticipantPairs
         createPairings();
+
+        // Saves all ParticipantPairs in a csv with all object info
         savePairings();
+
     }
 
     public void createPairings(){
-
-        parseResponses();
 
         List<Writer> lonelyWriters = new ArrayList<>();
         List<Artist> lonelyArtists = new ArrayList<>();
@@ -203,6 +211,7 @@ public class AssignPairings {
             Check work:
                 + Do all writers have exactly two non-null artist partners?
                 + Do all artists have one non-null writer partner?
+                + Do any writers who are also an artist have themselves as a partner?
                 + Do we have exactly 78 pairings?
                 + Do all pairings have a writer and artist?
          */
@@ -215,6 +224,11 @@ public class AssignPairings {
 
             for (Artist artist : artists) {
                 if (artist.partner == null) throw new Exception(artist + " is missing partner");
+            }
+
+            for (Writer writer : writers) {
+                if (writer.partner1.name == writer.name || writer.partner2.name == writer.name)
+                    throw new Exception(writer + " has themselves as a partner.");
             }
 
             if (pairings.size() != 78) throw new Exception("Number of pairings is incorrect");
@@ -290,7 +304,7 @@ public class AssignPairings {
                 }
 
                 // Parse final column
-                if (!firstPart[5].isEmpty()){
+                if (!firstPart[5].isEmpty()) {
                     // remove quotes if they exist
                     if (firstPart[5].startsWith("\"") &&  firstPart[5].endsWith("\"")) {
                         firstPart[5] = firstPart[5].substring(1, firstPart[5].length() - 1);
@@ -335,7 +349,7 @@ public class AssignPairings {
                     else if (values[2].equals("Chivalry")) participant.preferredCardClass = CardClass.CHIVALRY;
                     else participant.preferredCardClass = null;
 
-                    // assign partner
+                    // save chosen partner
                     if (partner1 != null) {
                         Writer temp;
                         if (writerList.containsKey(partner1)) temp = writerList.get(partner1);
