@@ -10,7 +10,8 @@ public class AssignClass {
 
     public static void main(String[] args){
 
-        // load data file for pairings
+        // populate pairings list
+        pairings.addAll(AssignPairings.getPairings());
 
         // separate pairings into covens and chivalry and either
         List<ParticipantPair> covenPreferredPairs = new ArrayList<>();

@@ -1,66 +1,113 @@
-import java.util.HashMap;
+import java.io.IOException;
+import java.io.PrintWriter;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
 public class AssignCards {
-    public static Random rand = new Random();
-    public static HashMap<String, TarotCard> deck;
+    private static Random rand = new Random();
+    private static List<TarotCard> unassignedCovens;
+    private static List<TarotCard> unassignedChivalry;
+    private static List<ParticipantPair> pairs;
 
-    public static void run() {
+    public static void main(String[] args) {
 
-        deck = Utilities.getTarotDeck();
+        boolean allCardsAssigned = true;
+        int outerNum = 0; // for statistics
 
+        // inner loop attempts to assign random cards to all pairs in the pairs list
+        // if no card exists to assign to the pair, the 'null' card will be assigned
+        // a null card will signal that it ran into a dead end
+        // or a dead end is not found, and allCardsAssigned stays true
+        // continues to outer loop, where we either try again or break
+        do {
+            System.out.println("Outer Loop iteration: " + ++outerNum);
+            repopulateLists();
+
+            for (ParticipantPair pair : pairs) {
+                assignBestCard(pair);
+                if (pair.assignedCard == null) {
+                    allCardsAssigned = false;
+                    break;
+                }
+            }
+        } while (!allCardsAssigned);
+
+        printAndSaveCardAssignments();
 
     }
 
-    public static void assignBestCard(ParticipantPair pair, List<TarotCard> unassignedCards){
+    private static void assignBestCard(ParticipantPair pair) {
+
+        // for troubleshooting
+        int loopNum = 0;
+
         CardClass pref = pair.preferredClass;
         TarotCard card = null;
-        boolean conflictFound = true;
+        List<TarotCard> appropriateList;
+            if (pref == CardClass.COVEN) appropriateList = unassignedCovens;
+            else appropriateList = unassignedChivalry;
+        List<TarotCard> temp = new ArrayList<>();
 
-        while (conflictFound) {
-            card = unassignedCards.get(rand.nextInt(unassignedCards.size()));
+        while (true) {
+            ++loopNum;
 
-            if(pref != null && card.cardClass != pref) continue;
+            // select random card from appropriate list
+            card = appropriateList.remove(rand.nextInt(appropriateList.size())); // remove so it is not considered again if it is on the avoiders list
 
-            if (!(pair.avoiders.contains(card))) {
-                conflictFound = false;
+            // removed card is not on avoiders list, so finalize assignment and break
+            if (!pair.avoiders.contains(card)) {
+                card.artist = pair.artist;
+                card.writer = pair.writer;
+                pair.setCard(card);
+                pairs.remove(pair);
+                appropriateList.addAll(temp);
+                temp.clear();
+                System.out.println("Loops needed for pair #" + (79 - (unassignedChivalry.size() + unassignedCovens.size())) + ": " + loopNum);
+                break;
             }
+
+            // removed card is on avoiders list, check if appropriate list is now empty
+            // if so, dead end found, so assign card null and break
+            if (appropriateList.isEmpty()) {
+                pair.setCard(null);
+                break;
+            }
+
+            // otherwise, add card to temp list and continue
+            temp.add(card); // list will be readded to the appropriate unassigned card list when best card is found
+
         }
 
-        card.artist = pair.artist;
-        card.writer = pair.writer;
-        pair.setCard(card);
-        unassignedCards.remove(card);
     }
 
-    public static void printStatistics() {
-        int fullMatches = 0;
-        int halfMatches = 0;
-        int noMatches = 0;
+    private static void repopulateLists(){
 
-        /*
-        for (TarotCard card : deck) {
-            if (card.artist.preferredCardClass == null && card.writer.preferredCardClass == null) {
-                fullMatches++;
-            } else if (card.cardClass == card.artist.preferredCardClass) {
-                if (card.cardClass == card.writer.preferredCardClass || card.writer.preferredCardClass == null) {
-                    fullMatches++;
-                } else {
-                    halfMatches++;
-                }
-            } else if (card.cardClass == card.writer.preferredCardClass) {
-                halfMatches++;
-            } else {
-                noMatches++;
+        // clear
+        unassignedChivalry.clear();
+        unassignedCovens.clear();
+        pairs.clear();
+
+        // repop pairings, unassigned decks
+        pairs.addAll(AssignPairings.getPairings());
+        for (TarotCard card : Utilities.getTarotDeck().values()) {
+            if (card.cardClass == CardClass.COVEN) unassignedCovens.add(card);
+            else unassignedChivalry.add(card);
+        }
+
+    }
+
+    public static void printAndSaveCardAssignments() {
+        // Print to terminal and save them as text file
+        try (PrintWriter printer = new PrintWriter("data/finalCardAssignments.txt")) {
+            printer.println("Card Name:");
+            for (TarotCard card : Utilities.getTarotDeck().values()) {
+                printer.print(card.cardName + ": " + card.artist.name + " & " + card.writer.name);
             }
-        } */
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
 
-        /* Print */
-        System.out.println("*********** PAIRING STATISTICS ***********");
-        System.out.println("Note: Card assignments where the participant indicated they were okay with either card class counts as a match.\n");
-        System.out.println("Artist and writer both got card class they wanted: " + fullMatches);
-        System.out.println("Only one of the participants got the card class they wanted: " + halfMatches);
-        System.out.println("Artist and writer both got opposite card class of what they wanted: " + noMatches);
     }
+
 }

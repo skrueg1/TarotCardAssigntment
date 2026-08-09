@@ -5,9 +5,9 @@ import java.util.List;
 import java.util.Random;
 
 public class AssignPairings {
-    List<ParticipantPair> pairings;
-    List<Artist> artists;
-    List<Writer> writers;
+    public static List<ParticipantPair> pairings;
+    private List<Artist> artists;
+    private List<Writer> writers;
 
     public void main(String[] args) throws IOException {
 
@@ -406,6 +406,10 @@ public class AssignPairings {
             e.printStackTrace();
         }
 
+    }
+
+    public static List<ParticipantPair> getPairings() {
+        return pairings;
     }
 
 }
