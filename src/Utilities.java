@@ -54,6 +54,9 @@ public class Utilities {
     }
 
     public static HashMap<String, TarotCard> getTarotDeck() {
+
+        if (deck != null) return deck;
+
         deck = new HashMap<>();
         String file = "data/deck.csv";
         String line;

@@ -5,12 +5,12 @@ import java.util.List;
 import java.util.Random;
 
 public class AssignPairings {
-    public static List<ParticipantPair> pairings = new ArrayList<>();
-    private List<Artist> artists = new ArrayList<>();
-    private List<Writer> writers = new ArrayList<>();
-    private Random random = new Random();
+    private static List<ParticipantPair> pairings = new ArrayList<>();
+    private static List<Artist> artists = new ArrayList<>();
+    private static List<Writer> writers = new ArrayList<>();
+    private static Random random = new Random();
 
-    public void main(String[] args) throws IOException {
+    public static List<ParticipantPair> run() {
 
         // Creates Writer and Artist objects from responses.csv
         // Also populates artists and writers class Lists
@@ -25,9 +25,11 @@ public class AssignPairings {
 
         System.out.println("Pairings created successfully!");
 
+        return pairings;
+
     }
 
-    public void parseResponses() {
+    private static void parseResponses() {
         String file = "data/responses.csv";
         String line;
 
@@ -167,7 +169,7 @@ public class AssignPairings {
 
     }
 
-    public void createPairings(){
+    private static void createPairings(){
 
         pairings.clear();
 
@@ -381,7 +383,7 @@ public class AssignPairings {
 
     }
 
-    public Artist assignArtist(Writer writer,
+    private static Artist assignArtist(Writer writer,
                                List<Artist> preferredList,
                                List<Artist> eitherList,
                                List<Artist> oppositeList ) {
@@ -409,7 +411,7 @@ public class AssignPairings {
         return artist;
     }
 
-    public void savePairings() {
+    private static void savePairings() {
         // Save them as CSV for later use
         try (PrintWriter printer = new PrintWriter("data/generatedPairs.csv")) {
             printer.println("artist,writer,PREFERENCE,\"avoiders\",assigned card,priority");
@@ -419,10 +421,6 @@ public class AssignPairings {
             e.printStackTrace();
         }
 
-    }
-
-    public static List<ParticipantPair> getPairings() {
-        return pairings;
     }
 
 }

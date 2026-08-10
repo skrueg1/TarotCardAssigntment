@@ -1,22 +1,23 @@
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
 public class AssignClass {
-    public static Random rand = new Random();
-    public static List<ParticipantPair> pairings = new ArrayList<>();
-    public static List<ParticipantPair> covens = new ArrayList<>();
-    public static List<ParticipantPair> chivalry = new ArrayList<>();
+    private static Random rand = new Random();
+    private static List<ParticipantPair> pairings = new ArrayList<>();
+    private static List<ParticipantPair> covens = new ArrayList<>();
+    private static List<ParticipantPair> chivalry = new ArrayList<>();
 
-    public static void main(String[] args){
+    public static List<ParticipantPair> run() {
 
         // populate pairings list
-        pairings.addAll(AssignPairings.getPairings());
+        pairings = AssignPairings.run();
 
         // separate pairings into covens and chivalry and either
         List<ParticipantPair> covenPreferredPairs = new ArrayList<>();
         List<ParticipantPair> chivalryPreferredPairs = new ArrayList<>();
-        List<ParticipantPair> noPreferencePairs = new ArrayList<>();
+        List<ParticipantPair> remainingPairs = new ArrayList<>();
 
         for (ParticipantPair pair : pairings) {
             if (pair.preferredClass == CardClass.COVEN)
@@ -24,7 +25,7 @@ public class AssignClass {
             else if (pair.preferredClass == CardClass.CHIVALRY )
                 chivalryPreferredPairs.add(pair);
             else
-                noPreferencePairs.add(pair);
+                remainingPairs.add(pair);
         }
 
         ParticipantPair tempPair = null;
@@ -85,23 +86,47 @@ public class AssignClass {
             }
         }
 
+        if (!covenPreferredPairs.isEmpty()) remainingPairs.addAll(covenPreferredPairs);
+        if (!chivalryPreferredPairs.isEmpty()) remainingPairs.addAll(chivalryPreferredPairs);
+
         // assign remainders
         while (covens.size() < 39) {
-            if (noPreferencePairs.isEmpty()) break;
-            tempPair = noPreferencePairs.remove(rand.nextInt(noPreferencePairs.size()));
+            if (remainingPairs.isEmpty()) break;
+            tempPair = remainingPairs.remove(rand.nextInt(remainingPairs.size()));
             covens.add(tempPair);
         }
         while (chivalry.size() < 39) {
-            if (noPreferencePairs.isEmpty()) break;
-            tempPair = noPreferencePairs.remove(rand.nextInt(noPreferencePairs.size()));
+            if (remainingPairs.isEmpty()) break;
+            tempPair = remainingPairs.remove(rand.nextInt(remainingPairs.size()));
             chivalry.add(tempPair);
+        }
+
+        // CHECK WORK
+        if (covens.size() != 39) {
+            throw new IllegalStateException("Expected 39 Coven pairs, got " + covens.size());
+        }
+
+        if (chivalry.size() != 39) {
+            throw new IllegalStateException("Expected 39 Chivalry pairs, got " + chivalry.size());
+        }
+
+        if (!remainingPairs.isEmpty()) {
+            throw new IllegalStateException(remainingPairs.size() + " pairs were not assigned to a class.");
+        }
+
+        // Add final touches
+        for (ParticipantPair pair : pairings) {
+            if (covens.contains(pair)) pair.assignedClass = CardClass.COVEN;
+            else pair.assignedClass = CardClass.CHIVALRY;
         }
 
        printStatistics();
 
+        return pairings;
+
     }
 
-    public static void printStatistics() {
+    private static void printStatistics() {
         int fullMatches = 0;
         int halfMatches = 0;
         int noMatches = 0;

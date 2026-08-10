@@ -7,6 +7,7 @@ public class ParticipantPair {
     public CardClass preferredClass;
     public List<TarotCard> avoiders;
     public TarotCard assignedCard;
+    public CardClass assignedClass;
     int priority;
 
     public ParticipantPair(Writer writer, Artist artist) {
