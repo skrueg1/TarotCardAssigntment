@@ -30,16 +30,12 @@ public class ParticipantPair {
     public void setAvoiders() {
 
         for (TarotCard card : artist.avoiders) {
-            if (card == null) break;
             this.avoiders.add(card);
         }
         for (TarotCard card : writer.avoiders) {
-            if (card == null) break;
-            if (this.avoiders.contains(card)) continue;
-            this.avoiders.add(card);
+            if (!this.avoiders.contains(card)) this.avoiders.add(card);
         }
 
-        this.avoiders = avoiders;
     }
 
     public void setCard(TarotCard card){

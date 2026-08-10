@@ -11,4 +11,9 @@ public class TarotCard {
         this.writer = null;
     }
 
+    @Override
+    public String toString() {
+        return cardName + "," + cardClass.toString();
+    }
+
 }

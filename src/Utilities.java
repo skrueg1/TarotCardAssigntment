@@ -53,7 +53,7 @@ public class Utilities {
         return newlist;
     }
 
-    public static void fillTarotDeck() {
+    public static HashMap<String, TarotCard> getTarotDeck() {
         deck = new HashMap<>();
         String file = "data/deck.csv";
         String line;
@@ -73,18 +73,13 @@ public class Utilities {
         }
 
         System.out.println("Confirming deck size: " + deck.size());
-    }
-
-    public static HashMap<String, TarotCard> getTarotDeck() {
-        if (deck != null && !deck.isEmpty()) return deck;
-        fillTarotDeck();
         return deck;
     }
 
     /****** TOSTRING METHODS ******/
 
     public static String avoidersToString(List<TarotCard> avoiders) {
-        if (avoiders.isEmpty()) return "null";
+        if (avoiders == null || avoiders.isEmpty()) return "null";
         StringBuilder sb = new StringBuilder();
         int i = 0;
         for (TarotCard card : avoiders) {
